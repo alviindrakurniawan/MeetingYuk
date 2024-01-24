@@ -1,7 +1,6 @@
 import 'dart:ui';
-import 'package:meetingyuk/network/api_service_http.dart';
-import 'package:meetingyuk/network/network_api_services.dart';
-import 'package:meetingyuk/ulits/app_url.dart';
+import 'package:MeetingYuk/network/network_api_services.dart';
+
 
 
 class AuthRepository {

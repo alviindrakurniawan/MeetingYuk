@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/home/model/detail_place.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/repo/place_repo.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/view_model/place_viewmodel.dart';
-import 'package:meetingyuk/ulits/notif.dart';
-import 'package:meetingyuk/features/home/widget/facilities.dart';
+import 'package:MeetingYuk/features/home/model/detail_place.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/repo/place_repo.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/view_model/place_viewmodel.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
+import 'package:MeetingYuk/features/home/widget/facilities.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:latlong2/latlong.dart';
@@ -27,6 +27,7 @@ class EditPlaceViewModel extends GetxController {
       // await getCurrentPosition();
       detailPlace.value = Get.arguments['detailPlace'];
       await getCurrentPosition();
+
     }
   }
 
@@ -485,8 +486,6 @@ class EditPlaceViewModel extends GetxController {
         .then((value) {
       if (value["code"] == 200) {
         detailPlace.value = DetailPlace.fromJson(value["data"]);
-
-        Get.back();
         Notif.snackBar('Delete Room', value['message']);
         print('Delete room success');
         loading.value = false;
@@ -506,7 +505,6 @@ class EditPlaceViewModel extends GetxController {
       if (value["code"] == 200) {
 
         placeController.getPlaceMerchant();
-
         Notif.snackBar('Delete Place', value['message']);
         print('Delete place success');
         loading.value = false;

@@ -1,6 +1,6 @@
 
 
-import 'package:meetingyuk/network/network_api_services.dart';
+import 'package:MeetingYuk/network/network_api_services.dart';
 
 
 class PlaceMerchantRepo {

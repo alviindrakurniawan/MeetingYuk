@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/view_model/edit_place_viewmodel.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/view_model/edit_place_viewmodel.dart';
 
 
 

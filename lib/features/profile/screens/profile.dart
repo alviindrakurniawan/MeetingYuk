@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/profile/view_model/profile_viewmodel.dart';
-import 'package:meetingyuk/features/profile/widgets/button.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:MeetingYuk/features/profile/view_model/profile_viewmodel.dart';
+import 'package:MeetingYuk/features/profile/widgets/button.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 
 class Profile extends GetView<ProfileViewModel> {
   const Profile({Key? key}) : super(key: key);
@@ -156,15 +155,13 @@ class Profile extends GetView<ProfileViewModel> {
                 Obx(() => controller.imageUrl.value == 'default'
                     ? CircleAvatar(
                         radius: 66,
-                        // _imageFile != null
-                        //     ? FileImage(File(_imageFile!.path))
                         backgroundImage: AssetImage(
-                            'assets/icons/photo_profile.png'), // add your default profile image in assets
+                            'assets/icons/photo_profile.png'),
                       )
                     : CircleAvatar(
                         radius: 66,
                         backgroundImage: NetworkImage(
-                            '${controller.imageUrl.value}'), // add your default profile image in assets
+                            '${controller.imageUrl.value}'),
                       )),
                 SizedBox(height: 30),
                 Container(
@@ -178,6 +175,10 @@ class Profile extends GetView<ProfileViewModel> {
                   ),
                   child: Column(
                     children: [
+                      Text(controller.currentUser.value.name,style: boldBlack18,),
+                      SizedBox(height: 10,),
+                      Obx(() => Text(controller.currentUser.value.userId,style: boldBlack16,textAlign: TextAlign.center,)),
+                      SizedBox(height: 10),
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 15),
                         width: double.infinity,
@@ -222,26 +223,7 @@ class Profile extends GetView<ProfileViewModel> {
                               )
                             : Container(),
                       ),
-                      // Container(
-                      //   margin: EdgeInsets.symmetric(vertical: 15),
-                      //   child: GestureDetector(
-                      //       onTap: () {
-                      //
-                      //       },
-                      //       child: Row(
-                      //         children: [
-                      //           Image.asset(
-                      //             'assets/icons/password.png',
-                      //             width: 24,
-                      //           ),
-                      //           SizedBox(width: 20),
-                      //           Text(
-                      //             'Reset Password',
-                      //             style: mediumBlack14,
-                      //           )
-                      //         ],
-                      //       )),
-                      // ),
+
                       Container(
                         margin: EdgeInsets.symmetric(vertical: 15),
                         child: GestureDetector(

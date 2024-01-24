@@ -1,36 +1,40 @@
 
-
 import 'package:get/get.dart';
-import 'package:meetingyuk/bindings/auth_binding.dart';
-import 'package:meetingyuk/bindings/dashboard_binding.dart';
-import 'package:meetingyuk/bindings/dashboard_merchant_binding.dart';
-import 'package:meetingyuk/bindings/detailplace_binding.dart';
-import 'package:meetingyuk/bindings/editplace_merchant_binding.dart';
-import 'package:meetingyuk/bindings/explorelist_binding.dart';
-import 'package:meetingyuk/bindings/history_binding.dart';
-import 'package:meetingyuk/bindings/home_binding.dart';
-import 'package:meetingyuk/bindings/profile_binding.dart';
-import 'package:meetingyuk/bindings/reservation_binding.dart';
-import 'package:meetingyuk/features/auth/screens/login.dart';
-import 'package:meetingyuk/features/auth/screens/sign_up.dart';
-import 'package:meetingyuk/features/explore/screens/explore_list.dart';
-import 'package:meetingyuk/features/history/screens/history_detail.dart';
-import 'package:meetingyuk/features/home/screens/dashboard.dart';
-import 'package:meetingyuk/features/home/screens/detail_place.dart';
-import 'package:meetingyuk/features/home/screens/list_page.dart';
-import 'package:meetingyuk/features/home/screens/reservation_page.dart';
-import 'package:meetingyuk/features/home/screens/search_page.dart';
-import 'package:meetingyuk/features/profile/screens/edit_profile.dart';
-import 'package:meetingyuk/features/profile/screens/profile.dart';
-import 'package:meetingyuk/features_merchantyuk/home_merchant/screens/dasboard_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/addplace1_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/addplace2_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/addroom_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/detail_place_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/editplace_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/editroom_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/picklocation_merchant.dart';
-import 'package:meetingyuk/splash_page.dart';
+import 'package:MeetingYuk/bindings/auth_binding.dart';
+import 'package:MeetingYuk/bindings/chat_binding.dart';
+import 'package:MeetingYuk/bindings/dashboard_binding.dart';
+import 'package:MeetingYuk/bindings/dashboard_merchant_binding.dart';
+import 'package:MeetingYuk/bindings/detailplace_binding.dart';
+import 'package:MeetingYuk/bindings/editplace_merchant_binding.dart';
+import 'package:MeetingYuk/bindings/explorelist_binding.dart';
+import 'package:MeetingYuk/bindings/history_binding.dart';
+import 'package:MeetingYuk/bindings/home_binding.dart';
+import 'package:MeetingYuk/bindings/profile_binding.dart';
+import 'package:MeetingYuk/bindings/reservation_binding.dart';
+import 'package:MeetingYuk/features/auth/screens/login.dart';
+import 'package:MeetingYuk/features/auth/screens/sign_up.dart';
+import 'package:MeetingYuk/features/chat/screens/broadcast_screen.dart';
+import 'package:MeetingYuk/features/chat/screens/chat_screen.dart';
+import 'package:MeetingYuk/features/chat/screens/clientchat_screen.dart';
+import 'package:MeetingYuk/features/chat/screens/merchantchat_screen.dart';
+import 'package:MeetingYuk/features/explore/screens/explore_list.dart';
+import 'package:MeetingYuk/features/history/screens/history_detail.dart';
+import 'package:MeetingYuk/features/home/screens/dashboard.dart';
+import 'package:MeetingYuk/features/home/screens/detail_place.dart';
+import 'package:MeetingYuk/features/home/screens/list_page.dart';
+import 'package:MeetingYuk/features/home/screens/reservation_page.dart';
+import 'package:MeetingYuk/features/home/screens/search_page.dart';
+import 'package:MeetingYuk/features/profile/screens/edit_profile.dart';
+import 'package:MeetingYuk/features/profile/screens/profile.dart';
+import 'package:MeetingYuk/features_merchantyuk/home_merchant/screens/dasboard_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/addplace1_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/addplace2_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/addroom_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/detail_place_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/editplace_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/editroom_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/picklocation_merchant.dart';
+import 'package:MeetingYuk/features/auth/screens/splash_page.dart';
 
 
 class AppRoutes {
@@ -174,6 +178,34 @@ class AppRoutes {
       page: () => PickLocation() ,
       transitionDuration: Duration(milliseconds: 250),
       binding: EditPlaceMerchantBinding(),
+      transition: Transition.leftToRightWithFade ,
+    ),
+    GetPage(
+      name: '/chat',
+      page: () => ClientChatScreen() ,
+      transitionDuration: Duration(milliseconds: 250),
+      binding: ChatBinding(),
+      transition: Transition.leftToRightWithFade ,
+    ),
+    GetPage(
+      name: '/chat-merchant',
+      page: () => MerchantChatScreen() ,
+      transitionDuration: Duration(milliseconds: 250),
+      binding: ChatBinding(),
+      transition: Transition.leftToRightWithFade ,
+    ),
+    GetPage(
+      name: '/detail-chat',
+      page: () => ChatScreen() ,
+      transitionDuration: Duration(milliseconds: 250),
+      binding: ChatBinding(),
+      transition: Transition.leftToRightWithFade ,
+    ),
+    GetPage(
+      name: '/broadcast',
+      page: () => BroadcastScreen() ,
+      transitionDuration: Duration(milliseconds: 250),
+      binding: ChatBinding(),
       transition: Transition.leftToRightWithFade ,
     ),
 

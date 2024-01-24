@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/features/home/model/detail_place.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/features/home/model/detail_place.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 
 final Map<String, IconData> facilityIcons = {
   'Television': Icons.tv,

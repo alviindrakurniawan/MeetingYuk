@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/explore/widget/explore_listtile.dart';
-import 'package:meetingyuk/features/profile/widgets/button.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/view_model/place_viewmodel.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/features/explore/widget/explore_listtile.dart';
+import 'package:MeetingYuk/features/profile/widgets/button.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/view_model/place_viewmodel.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 
 class PlaceMerchant extends GetView<PlaceViewModel> {
   const PlaceMerchant({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Get.put<PlaceViewModel>(PlaceViewModel());
+
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -43,7 +45,7 @@ class PlaceMerchant extends GetView<PlaceViewModel> {
                                 height: 40,
                                 borderRad: 20,
                                 onPressed: (){
-
+                                  Get.toNamed('/addPlace1-merchant',arguments: {'code':'add-place'});
                                 },
                               ),
                             )),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/features/home/widget/facilities.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/features/home/widget/facilities.dart';
 
 
 class FacilityCheckbox extends StatelessWidget {

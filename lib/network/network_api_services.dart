@@ -1,13 +1,14 @@
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/network/app_exception.dart';
-import 'package:meetingyuk/network/getconnect_cookie.dart';
+import 'package:MeetingYuk/network/app_exception.dart';
+import 'package:MeetingYuk/network/getconnect_cookie.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/network/getconnect_recommendation.dart';
-import 'package:meetingyuk/ulits/app_url.dart';
+import 'package:MeetingYuk/network/getconnect_recommendation.dart';
+import 'package:MeetingYuk/network/getconnect_chat.dart';
 
 class ApiService {
   final GetConnected _getConnect = Get.put(GetConnected());
   final GetConnectedRec _getConnectedRec = Get.put(GetConnectedRec());
+  final GetConnectedChat _getConnectedChat = Get.put(GetConnectedChat());
 
   final storage = GetStorage();
 
@@ -88,6 +89,27 @@ class ApiService {
     }
   }
 
+  getChat<T>({
+    required String endpoint,
+    Map<String, dynamic>? query,
+    Map<String, String>? headers,
+  }) async {
+
+    Map<String, String> customHeaders = await getCustomHeaders(headers);
+    final response = await _getConnectedChat.get(endpoint, headers: customHeaders, query: query);
+
+
+    if (!response.hasError) {
+      return _returnResponse(response);
+    } else {
+      if (response.body is Map ) {
+        throw AppExceptions(response.body['error']);
+      } else {
+        throw AppExceptions('An error occurred', response.statusCode);
+      }
+    }
+  }
+
   post<T>({
     required String endpoint,
     dynamic body,
@@ -110,25 +132,27 @@ class ApiService {
     }
   }
 
-  // post2<T>({
-  //   required String endpoint,
-  //   dynamic body,
-  //   Map<String, String>? headers,
-  //   Map<String,dynamic>? query,
-  // }) async {
-  //
-  //   final response = await _getConnect.post(endpoint, body, headers: headers, query: query);
-  //
-  //   if (!response.hasError) {
-  //     return _returnResponse(response);
-  //   } else {
-  //     if (response.body is Map && response.body.containsKey('message')) {
-  //       throw AppExceptions(response.body['message']);
-  //     } else {
-  //       throw AppExceptions('An error occurred', response.statusCode);
-  //     }
-  //   }
-  // }
+  postChat<T>({
+    required String endpoint,
+    dynamic body,
+    Map<String, String>? headers,
+    Map<String,dynamic>? query,
+  }) async {
+
+    final response = await _getConnectedChat.post(endpoint, body, query: query);
+
+    if (!response.hasError) {
+      return _returnResponse(response);
+    } else {
+      if (response.body is Map && response.body.containsKey('message')) {
+        throw AppExceptions(response.body['message']);
+      } else {
+        throw AppExceptions('An error occurred', response.statusCode);
+      }
+    }
+  }
+
+
 
   put<T>({
     required String endpoint,
@@ -138,6 +162,29 @@ class ApiService {
 
     Map<String, String> customHeaders = await getCustomHeaders(headers);
     final response = await _getConnect.put(endpoint, body, headers: customHeaders);
+
+    if (!response.hasError) {
+      return _returnResponse(response);
+    } else {
+      if (response.body is Map && response.body.containsKey('message')) {
+        throw AppExceptions(response.body['message']);
+      } else {
+        throw AppExceptions('An error occurred', response.statusCode);
+      }
+    }
+  }
+
+
+
+
+
+  putChat<T>({
+    required String endpoint,
+    dynamic body,
+    Map<String, String>? headers,
+  }) async {
+
+    final response = await _getConnectedChat.put(endpoint, body);
 
     if (!response.hasError) {
       return _returnResponse(response);
@@ -184,7 +231,7 @@ dynamic _returnResponse(Response<dynamic> response){
     case 403:
       throw ForbiddenException(response.body['message']);
     case 404:
-      throw BadRequestException(response.body['message']);
+      return response.body;
     case 500:
       throw FetchDataException('Internal Server Error');
     case 501:

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/home/view_model/reservation_viewmodel.dart';
+import 'package:MeetingYuk/features/home/view_model/reservation_viewmodel.dart';
 
 
 

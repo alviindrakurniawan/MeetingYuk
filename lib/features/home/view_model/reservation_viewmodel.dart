@@ -1,16 +1,21 @@
 
 import 'dart:math';
+import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/features/home/view_model/dasboard_viewmodel.dart';
+import 'package:MeetingYuk/features/history/view_model/history_viewmodel.dart';
+import 'package:MeetingYuk/features/home/view_model/dasboard_viewmodel.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/home/model/detail_place.dart';
-import 'package:meetingyuk/features/home/repo/reservation_repo.dart';
-import 'package:meetingyuk/ulits/notif.dart';
+import 'package:MeetingYuk/features/home/model/detail_place.dart';
+import 'package:MeetingYuk/features/home/repo/reservation_repo.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
 import 'package:intl/intl.dart';
+import 'package:MeetingYuk/features/profile/view_model/profile_viewmodel.dart';
 
 class ReservationViewModel extends GetxController {
   final ReservationRepository _api = ReservationRepository();
   final storage = GetStorage();
+  final HistoryViewModel historyController= Get.find();
+  final DashViewModel dashController = Get.find();
 
   @override
   void onInit() async {
@@ -20,7 +25,6 @@ class ReservationViewModel extends GetxController {
     reservationId.value = Get.arguments['reservationId'];
 
   }
-  final dashController = Get.find<DashViewModel>();
 
   var loading = false.obs;
   var activeButton = false.obs;
@@ -29,8 +33,8 @@ class ReservationViewModel extends GetxController {
   // Rxn<DateTime> selectedDate = Rxn<DateTime>();
   Rxn<DetailPlace> detailPlace = Rxn<DetailPlace>();
   var reservationId=''.obs;
-
-  var dateTime = DateTime.now().obs;
+  Rxn<DateTime> dateTime = Rxn<DateTime>();
+  // var dateTime = DateTime.now().obs;
 
   var availableSlots = <DateTime>[].obs;
   var availableSlotsEnd = <DateTime>[].obs;
@@ -39,8 +43,16 @@ class ReservationViewModel extends GetxController {
   Rxn<DateTime> startTime = Rxn<DateTime>();
   // var startTime = ''.obs;
   Rxn<DateTime> endTime = Rxn<DateTime>();
+  RxList<String> participantName = <String>[].obs;
+  RxList<String> participantId = <String>[].obs;
+
+  TextEditingController addController = TextEditingController();
 
   var totalPrice='-'.obs;
+
+  Future checkTodayOpen()async{
+
+  }
 
 
   Future setDateTime(DateTime date) async {
@@ -50,7 +62,6 @@ class ReservationViewModel extends GetxController {
   //Needed when create reservation
   String getStartTime(){
     DateTime wibDateTime = startTime.value!.toUtc();
-
     // Change format to WIB & dont needed to UTC+7
     final DateFormat formatter = DateFormat('yyyy-MM-dd HH:mm:ss');
     String formatted = formatter.format(wibDateTime) + ' WIB';
@@ -103,7 +114,7 @@ class ReservationViewModel extends GetxController {
 
   //for parsing object room data & null checker
   List<DateTime> availSlotByDay(List<dynamic> bookedTime) {
-    final dayOfWeek = DateFormat('EEEE').format(dateTime.value).toLowerCase();
+    final dayOfWeek = DateFormat('EEEE').format(dateTime.value!).toLowerCase();
 
     final openingHoursMap = {
       'monday': detailPlace.value?.openingHours.monday,
@@ -124,10 +135,10 @@ class ReservationViewModel extends GetxController {
 
   List<DateTime> generateAvailableTimes(List<dynamic> bookedTimes, String openhour) {
     DateTime open =
-        DateTime.parse('${DateFormat('yyyy-MM-dd').format(dateTime.value)}T${openhour.split('-')[0]}:00Z');
+        DateTime.parse('${DateFormat('yyyy-MM-dd').format(dateTime.value!)}T${openhour.split('-')[0]}:00Z');
     print('open place $open');
     DateTime close =
-        DateTime.parse('${DateFormat('yyyy-MM-dd').format(dateTime.value)}T${openhour.split('-')[1]}:00Z');
+        DateTime.parse('${DateFormat('yyyy-MM-dd').format(dateTime.value!)}T${openhour.split('-')[1]}:00Z');
     print('close place $close');
 
     List<DateTime> bookedStartTimes = bookedTimes
@@ -162,6 +173,23 @@ class ReservationViewModel extends GetxController {
     return availableTimes;
   }
 
+  //set initialdate
+  void setNextAvailableDate(OpeningHours openingHours) {
+    dateTime.value = getNextOpenDate(DateTime.now(), openingHours);
+  }
+  //check initialDate
+  DateTime getNextOpenDate(DateTime startingDate, OpeningHours openingHours) {
+    DateTime nextOpenDate = startingDate;
+
+    while (true) {
+      if (isDayAvailable(nextOpenDate, openingHours)) {
+        return nextOpenDate;
+      }
+      nextOpenDate = nextOpenDate.add(Duration(days: 1));
+    }
+  }
+
+
   //check at showDatePicker
   bool isDayAvailable(DateTime date, OpeningHours openingHours) {
     String day = '';
@@ -190,6 +218,8 @@ class ReservationViewModel extends GetxController {
     }
     return day.isNotEmpty;
   }
+
+
 
   //filtered startTime for endTime list
   List<DateTime> filterSlots() {
@@ -255,13 +285,24 @@ class ReservationViewModel extends GetxController {
     return hours;
   }
 
+  Future addParticipant({required String id}) async{
+    _api.addParticipant(id: id).then((value) {
+      if(value["code"]==200){
+        participantId.add(value['data']['id']);
+        participantName.add(value['data']['name']);
+      }else{
+        Notif.snackBar('Add Participant', value['message']);
+      }
+    });
+  }
+
 
 
   Future createReservation() async {
     loading.value = true;
     Map<String, dynamic> body = {
       "room_id": detailPlace.value!.rooms[indexRoom.value].roomId,
-      "participants_id": [],
+      "participants_id": participantId.value,
       "start_at": getStartTime(),
       "end_at": getEndTime()
     };
@@ -271,12 +312,41 @@ class ReservationViewModel extends GetxController {
       print('');
       if (value["code"] == 201) {
         loading.value = false;
-
         Notif.snackBar('Create Reservation', 'Success');
+        historyController.getallReservation();
+        // dashController.changeScreen2(2);
+        // Get.delete<ReservationViewModel>;
+      } else {
+
+        Notif.snackBar('Error', value['message']);
+        loading.value = false;
+        Get.back();
+      }
+    }).onError((error, stackTrace) {
+      loading.value = false;
+      print('error disini');
+      Notif.snackBar('Error', error.toString());
+    });
+  }
+  Future updateReservation() async {
+    loading.value = true;
+    Map<String, dynamic> body = {
+      "start_at": getStartTime(),
+      "end_at": getEndTime()
+    };
+    print(body);
+    _api.updateReservation(body: body,reservationId: reservationId.value).then((value) {
+
+      if (value["code"] == 200) {
+        loading.value = false;
+
+        Notif.snackBar('Update Reservation', 'Success');
+        historyController.getallReservation();
       } else {
         Notif.snackBar('Error', value['message']);
         loading.value = false;
         Get.back();
+
       }
     }).onError((error, stackTrace) {
       loading.value = false;

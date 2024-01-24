@@ -1,11 +1,11 @@
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/explore/model/recommendation.dart';
-import 'package:meetingyuk/features/home/model/detail_place.dart';
-import 'package:meetingyuk/features/home/repo/home_repo.dart';
+import 'package:MeetingYuk/features/explore/model/recommendation.dart';
+import 'package:MeetingYuk/features/home/model/detail_place.dart';
+import 'package:MeetingYuk/features/home/repo/home_repo.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:meetingyuk/ulits/notif.dart';
-import 'package:meetingyuk/features/history/model/reservation.dart';
-import 'package:meetingyuk/features/home/model/place.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
+import 'package:MeetingYuk/features/history/model/reservation.dart';
+import 'package:MeetingYuk/features/home/model/place.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 
@@ -105,7 +105,6 @@ class HomeViewModel extends GetxController {
 
         loadingPrevious.value = false;
       } else {
-        Notif.snackBar('Get ReservationHistor Failed', 'Please try again later');
         loadingPrevious.value = false;
       }
     }).onError((error, stackTrace) {
@@ -114,7 +113,6 @@ class HomeViewModel extends GetxController {
 
       }else{
         print('ERROR PREVBOOKING :$error');
-        Notif.snackBar('Error', error.toString());
       }
     });
   }

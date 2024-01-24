@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/features/explore/repo/explore_repo.dart';
+import 'package:MeetingYuk/features/explore/repo/explore_repo.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:meetingyuk/ulits/notif.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
 
 class ExploreViewModel extends GetxController{
   @override

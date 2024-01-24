@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:meetingyuk/features_merchantyuk/home_merchant/repo/booking_repo.dart';
-import 'package:meetingyuk/ulits/notif.dart';
-import 'package:meetingyuk/features/history/model/reservation.dart';
+import 'package:MeetingYuk/features_merchantyuk/home_merchant/repo/booking_repo.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
+import 'package:MeetingYuk/features/history/model/reservation.dart';
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 
 class BookingViewModel extends GetxController {
   final BookingRepo _api = BookingRepo();
@@ -15,9 +15,12 @@ class BookingViewModel extends GetxController {
   }
 
   var loading = false.obs;
+  var loadingButton = false.obs;
+  var customerName = ''.obs;
 
   var reservationListRaw = <Reservation>[].obs;
   var selectedPlaces = <String>{}.obs;
+  var groupedReservations = <String, List<Reservation>>{}.obs;
 
   void togglePlaceSelection(String placeName) {
     if (selectedPlaces.contains(placeName)) {
@@ -25,6 +28,16 @@ class BookingViewModel extends GetxController {
     } else {
       selectedPlaces.add(placeName);
     }
+  }
+
+  Map<String, List<Reservation>> get groupByFilteredReservations {
+    return groupBy<Reservation, String>(
+      filteredReservations,  // Notice that we use filteredReservations here
+          (obj) {
+        DateTime date = DateTime.parse(obj.startAt);
+        return "${date.day}-${date.month}-${date.year}";
+      },
+    );
   }
 
   List<Reservation> get filteredReservations {
@@ -38,21 +51,27 @@ class BookingViewModel extends GetxController {
   }
 
 
-  TextEditingController searchbar = TextEditingController();
-
   Future<void> getReservation() async {
     loading.value = true;
     await _api.getReservation().then((value) {
       if (value["code"] == 200) {
-
-      //belum sort
       reservationListRaw.assignAll((value['data'] as List)
           .map((item) => Reservation.fromJson(item))
           .toList()
       );
+      reservationListRaw.sort((a,b) => a.startAt.compareTo(b.startAt));
 
-      reservationListRaw.sort((a,b) => b.updatedAt.compareTo(a.updatedAt));
+      groupedReservations.value = groupBy<Reservation, String>(
+        reservationListRaw,
+            (obj) {
+          DateTime date = DateTime.parse(obj.startAt);
+          return "${date.day}-${date.month}-${date.year}";
+        },
+      );
+
       loading.value = false;
+
+
     } else {
       Notif.snackBar('Get Reservation Failed', 'Please try again later');
       loading.value = false;
@@ -64,29 +83,93 @@ class BookingViewModel extends GetxController {
     });
   }
 
-// Future<void> getBestRated() async {
-//   loadingBestRated.value = true;
-//   await _api
-//       .getAllPlace().then((value) {
-//     if (value["code"] == 200) {
-//       print('best rated: ${value['data']}');
-//       //belum sort
-//       bestRatedList.assignAll((value['data'] as List)
-//           .map((item) => Place.fromJson(item))
-//           .toList()
-//       );
-//
-//       bestRatedList.sort((a, b) => b.ratings.compareTo(a.ratings));
-//       loadingBestRated.value = false;
-//     } else {
-//       Notif.snackBar('Get BestRated Failed', 'Please try again later');
-//
-//       loadingBestRated.value = false;
-//     }
-//   }).onError((error, stackTrace) {
-//     loadingBestRated.value = false;
-//     print('ERROR BESTRATED :$error');
-//     Notif.snackBar('Error', error.toString());
-//   });
-// }
+  Future<void> accReservation({required String reservationId}) async {
+    loadingButton.value = true;
+    await _api.accReservation(reservationId: reservationId).then((value) {
+      if (value["code"] == 200) {
+        Notif.snackBar('Accept Reservation', 'Success');
+        loadingButton.value=false;
+        Get.back();
+        getReservation();
+      } else {
+        Notif.snackBar('Accept Reservation Failed', 'Please try again later');
+        loadingButton.value=false;
+      }
+    }).onError((error, stackTrace) {
+      loadingButton.value=false;
+      print('ERROR accReservation :$error');
+      Notif.snackBar('Error', error.toString());
+    });
+  }
+
+  Future<void> rejectReservation({required String reservationId}) async {
+    loadingButton.value = true;
+    await _api.rejectReservation(reservationId: reservationId).then((value) {
+      if (value["code"] == 200) {
+        Notif.snackBar('Reject Reservation', 'Success');
+        loadingButton.value=false;
+        Get.back();
+        getReservation();
+      } else {
+        Notif.snackBar('Reject Reservation Failed', 'Please try again later');
+        loadingButton.value=false;
+      }
+    }).onError((error, stackTrace) {
+      loadingButton.value=false;
+      print('ERROR rejectReservation :$error');
+      Notif.snackBar('Error', error.toString());
+    });
+  }
+
+  Future<void> updatePayment({required String reservationId}) async {
+    loadingButton.value = true;
+    await _api.updatePayment(reservationId: reservationId).then((value) {
+      if (value["code"] == 200) {
+        Notif.snackBar('Update Payment', 'Success');
+        loadingButton.value=false;
+        Get.back();
+        getReservation();
+      } else {
+        Notif.snackBar('Update Payment Failed', 'Please try again later');
+        loadingButton.value=false;
+      }
+    }).onError((error, stackTrace) {
+      loadingButton.value=false;
+      print('ERROR updatePayment :$error');
+      Notif.snackBar('Error', error.toString());
+    });
+  }
+
+  Future<void> findUserId({required String userId}) async {
+    await _api.checkUser(userId: userId).then((value) {
+      if (value["code"] == 200) {
+        customerName.value = value['data']['name'];
+      } else {
+        print('error');
+
+      }
+    }).onError((error, stackTrace) {
+      print('ERROR getuserId :$error');
+      Notif.snackBar('Error', error.toString());
+    });
+  }
+
+
+
+  String getTime(String dateTime) {
+    final dt = DateTime.parse(dateTime);
+    final time =
+        "${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
+    return time;
+  }
+
+  String getDate(String dateTime) {
+    final dt = DateTime.parse(dateTime);
+    final time =
+        "${dt.day.toString()}/${dt.month.toString()}/${dt.year.toString()}";
+    return time;
+  }
+
+
+
 }

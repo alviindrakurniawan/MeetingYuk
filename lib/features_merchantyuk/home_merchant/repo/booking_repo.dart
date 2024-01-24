@@ -1,4 +1,4 @@
-import 'package:meetingyuk/network/network_api_services.dart';
+import 'package:MeetingYuk/network/network_api_services.dart';
 
 
 class BookingRepo {
@@ -26,5 +26,35 @@ class BookingRepo {
 
     return response;
   }
+
+  Future<dynamic> accReservation({required String reservationId})async{
+    final response = await _apiService.put(
+        endpoint: '/reservations/$reservationId/accept',
+    );
+    return response;
+  }
+
+  Future<dynamic> rejectReservation({required String reservationId})async{
+    final response = await _apiService.put(
+      endpoint: '/reservations/$reservationId/reject',
+    );
+    return response;
+  }
+
+  Future<dynamic> updatePayment({required String reservationId})async{
+    final response = await _apiService.put(
+      endpoint: '/reservations/$reservationId/payments',
+    );
+    return response;
+  }
+
+  Future<dynamic> checkUser({required String userId})async{
+    final response = await _apiService.get(
+      endpoint: '/users/$userId',
+    );
+    return response;
+  }
+
+
 
 }

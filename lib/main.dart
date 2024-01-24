@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/bindings/app_binding.dart';
-import 'ulits/color.dart';
+import 'package:MeetingYuk/bindings/app_binding.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
 import 'app_routes.dart';
 
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/auth/view_model/auth_viewmodel.dart';
-import 'package:meetingyuk/ulits/notif.dart';
+import 'package:MeetingYuk/features/auth/view_model/auth_viewmodel.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
 
 class SignUp extends GetView<AuthViewModel> {
   const SignUp({Key? key}) : super(key: key);
@@ -31,7 +31,7 @@ class SignUp extends GetView<AuthViewModel> {
                 Container(
                   alignment: AlignmentDirectional.center,
                   child: const Text(
-                    'Daftar Akun',
+                    'REGISTER',
                     style: TextStyle(
                       color: Color(0xFF3880A4),
                       fontSize: 35.0,

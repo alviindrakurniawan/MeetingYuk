@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 import 'package:flutter/cupertino.dart';
 
 class CardRoomMerchant extends StatelessWidget {

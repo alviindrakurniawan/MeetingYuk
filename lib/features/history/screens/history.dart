@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/history/view_model/history_viewmodel.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/notif.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/features/history/view_model/history_viewmodel.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 
 class History extends GetView<HistoryViewModel> {
   const History({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    Get.put<HistoryViewModel>(HistoryViewModel());
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -137,6 +138,7 @@ class History extends GetView<HistoryViewModel> {
                                   .getDetailPlace(reservation.placeId);
                               final detailReservation = await controller
                                   .getDetailReservation(reservation.id);
+
                               if (detailPlace != null) {
                                 Get.toNamed('/detailhistory', arguments: {
                                   'detailReservation': detailReservation,

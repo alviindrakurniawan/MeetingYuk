@@ -1,6 +1,6 @@
 
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/profile/view_model/profile_viewmodel.dart';
+import 'package:MeetingYuk/features/profile/view_model/profile_viewmodel.dart';
 
 class ProfileBinding implements Bindings {
   @override

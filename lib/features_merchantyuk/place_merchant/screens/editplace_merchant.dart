@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/profile/widgets/button.dart';
-import 'package:meetingyuk/features/profile/widgets/custom_form.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/view_model/edit_place_viewmodel.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/notif.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/features/profile/widgets/button.dart';
+import 'package:MeetingYuk/features/profile/widgets/custom_form.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/view_model/edit_place_viewmodel.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 

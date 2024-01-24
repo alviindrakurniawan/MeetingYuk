@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/features/home/model/detail_place.dart';
-import 'package:meetingyuk/features/history/model/reservation.dart';
-import 'package:meetingyuk/features/history/repo/history_repo.dart';
-import 'package:meetingyuk/features/home/model/detail_reservation.dart';
-import 'package:meetingyuk/ulits/notif.dart';
+import 'package:MeetingYuk/features/home/model/detail_place.dart';
+import 'package:MeetingYuk/features/history/model/reservation.dart';
+import 'package:MeetingYuk/features/history/repo/history_repo.dart';
+import 'package:MeetingYuk/features/home/model/detail_reservation.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
 import 'package:collection/collection.dart';
 
 class HistoryViewModel extends GetxController {
@@ -39,7 +39,7 @@ class HistoryViewModel extends GetxController {
 
         loading.value = false;
       } else {
-        Notif.snackBar('Get History Failed', value['message'].toString());
+        // Notif.snackBar('Get History Failed', value['message'].toString());
         loading.value = false;
       }
     }).onError((error, stackTrace) {

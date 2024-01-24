@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/features/explore/widget/explore_listtile.dart';
-import 'package:meetingyuk/features/home/view_model/home_viewmodel.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
+import 'package:MeetingYuk/features/explore/widget/explore_listtile.dart';
+import 'package:MeetingYuk/features/home/view_model/home_viewmodel.dart';
+
 import 'package:get/get.dart';
 
 class ListPage extends GetView<HomeViewModel> {

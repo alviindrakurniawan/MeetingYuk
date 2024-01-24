@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -15,12 +15,12 @@ class CafeCardRecom extends StatelessWidget {
 
   const CafeCardRecom(
       {required this.imageUrl,
-        required this.namePlace,
-        required this.nameRoom,
-        required this.startAt,
-        required this.endAt,
-        required this.totalPrice,
-        this.onTap});
+      required this.namePlace,
+      required this.nameRoom,
+      required this.startAt,
+      required this.endAt,
+      required this.totalPrice,
+      this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +30,13 @@ class CafeCardRecom extends StatelessWidget {
           "${dt.hour.toString().padLeft(2, '0')}:${dt.minute.toString().padLeft(2, '0')}";
       return time;
     }
+
     String getDay(String dateTime) {
       final dt = DateTime.parse(dateTime);
-      final time =
-          "${DateFormat('d MMMM  yyyy').format(dt)}";
+      final time = "${DateFormat('d MMMM  yyyy').format(dt)}";
       return time;
     }
+
     String intToMoneyString(int number) {
       final buffer = StringBuffer();
       final str = number.toString().split('').reversed.toList();
@@ -50,7 +51,11 @@ class CafeCardRecom extends StatelessWidget {
       return buffer.toString().split('').reversed.join();
     }
 
-    final Image errorImage = Image.asset("assets/images/logo_color.png");
+    final Image errorImage = Image.asset(
+      "assets/images/logo_color.png",
+      fit: BoxFit.fill,
+      height: 145,
+    );
     return Container(
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -63,7 +68,7 @@ class CafeCardRecom extends StatelessWidget {
               offset: Offset(0, 4),
             )
           ]),
-      margin: EdgeInsets.only(top: 5,bottom: 10),
+      margin: EdgeInsets.only(top: 5, bottom: 10),
       child: GestureDetector(
         onTap: onTap,
         child: Column(
@@ -75,7 +80,7 @@ class CafeCardRecom extends StatelessWidget {
                   topLeft: Radius.circular(10), topRight: Radius.circular(10)),
               child: Image.network(
                 imageUrl,
-                errorBuilder:  (context, error, stackTrace) => errorImage,
+                errorBuilder: (context, error, stackTrace) => errorImage,
                 fit: BoxFit.cover,
                 height: 145,
               ),
@@ -105,20 +110,26 @@ class CafeCardRecom extends StatelessWidget {
                     ],
                   ),
                   SizedBox(height: 4),
-                  Text('$nameRoom',style: mediumBlack14,),
+                  Text(
+                    '$nameRoom',
+                    style: mediumBlack14,
+                  ),
                   SizedBox(height: 2),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Icon(Icons.date_range_rounded,size: 16),
+                      Icon(Icons.date_range_rounded, size: 16),
                       SizedBox(width: 5),
-                      Text('${getDay(startAt)}',style: regularBlack12,),
+                      Text(
+                        '${getDay(startAt)}',
+                        style: regularBlack12,
+                      ),
                     ],
                   ),
                   SizedBox(height: 2),
                   Row(
                     children: [
-                      Icon( Icons.access_time_rounded,size: 16),
+                      Icon(Icons.access_time_rounded, size: 16),
                       SizedBox(width: 5),
                       Text(
                         '${getTime(startAt)} - ${getTime(endAt)}',
@@ -145,7 +156,6 @@ class CafeCardRecom extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 ],
               ),
             ),

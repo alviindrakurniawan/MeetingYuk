@@ -1,8 +1,10 @@
+import 'package:MeetingYuk/features/home/view_model/dasboard_viewmodel.dart';
+import 'package:MeetingYuk/features/home/view_model/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/home/view_model/reservation_viewmodel.dart';
-import 'package:meetingyuk/ulits/style.dart';
-import 'package:meetingyuk/ulits/color.dart';
+import 'package:MeetingYuk/features/home/view_model/reservation_viewmodel.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 
@@ -199,7 +201,10 @@ class ReservationPage extends GetView<ReservationViewModel> {
                   useMagnifier: true,
                   children: List<Widget>.generate(slots.length, (index) {
                     return Center(
-                        child: Text(DateFormat('HH:mm').format(slots[index])));
+                        child: Text(DateFormat('HH:mm').format(slots[index]),
+                            style: TextStyle(
+                              fontWeight: FontWeight.w500,
+                            )));
                   }),
                 ),
               ),
@@ -227,217 +232,143 @@ class ReservationPage extends GetView<ReservationViewModel> {
             ),
           ),
         ),
-        body: Container(
-          constraints: BoxConstraints.expand(),
-          color: backgroundColor,
-          child: SafeArea(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  '${controller.detailPlace.value!.rooms[controller.indexRoom.value].name}',
-                  style: boldPrim24,
-                ),
-                SizedBox(
-                  height: 12,
-                ),
-                Text(
-                  'Please select your date',
-                  style: regBlack14,
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.only(top: 7, left: 45, right: 45, bottom: 50),
-                  child: Column(
-                    children: [
-                      //Select Date
-                      GestureDetector(
-                        onTap: () async {
-                          await showDatePicker(
-                            context: context,
-                            initialDate: controller.dateTime.value,
-                            firstDate: DateTime.now(),
-                            lastDate: controller.dateTime.value
-                                .add(Duration(days: 30)),
-                            selectableDayPredicate: (DateTime date) =>
-                                controller.isDayAvailable(date,
-                                    controller.detailPlace.value!.openingHours),
-                            builder: (BuildContext context, Widget? child) {
-                              return Theme(
-                                data: ThemeData.light().copyWith(
-                                  colorScheme: ColorScheme.light(
-                                    primary: primaryColor,
-                                  ),
-                                  dialogBackgroundColor: Colors.white,
-                                  dialogTheme: const DialogTheme(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(20)))),
+        body: SingleChildScrollView(
+
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                '${controller.detailPlace.value!.rooms[controller.indexRoom.value].name}',
+                style: boldPrim24,
+              ),
+              SizedBox(
+                height: 12,
+              ),
+              Text(
+                'Please select your date',
+                style: regBlack14,
+              ),
+              Container(
+                padding:
+                    EdgeInsets.only(top: 7, left: 45, right: 45, bottom: 50),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    //Select Date
+                    GestureDetector(
+                      onTap: () async {
+                        controller.setNextAvailableDate(
+                            controller.detailPlace.value!.openingHours);
+
+                        await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime.now()
+                              .add(Duration(days: 30)),
+                          selectableDayPredicate: (DateTime date) =>
+                              controller.isDayAvailable(date,
+                                  controller.detailPlace.value!.openingHours),
+                          builder: (BuildContext context, Widget? child) {
+                            return Theme(
+                              data: ThemeData.light().copyWith(
+                                colorScheme: ColorScheme.light(
+                                  primary: primaryColor,
                                 ),
-                                child: child!,
-                              );
-                            },
-                          ).then((date) async {
-                            if (date != null) {
-                              print('check1');
-                              await controller.setDateTime(date);
-                              print('check2');
-                              controller.activeButton.value = true;
-                              // await
-                              await controller.checkAvailability(
-                                  selected_date: DateFormat('yyyy-MM-dd')
-                                      .format(controller.dateTime.value));
-                              print('check3');
-                            } else {}
-                            controller.resetStartEndPrice();
-                          });
-                        },
-                        child: Container(
-                            padding: EdgeInsets.only(
-                                left: 12, top: 6, right: 10, bottom: 6),
-                            decoration: BoxDecoration(
-                                boxShadow: const [
-                                  BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 4,
-                                      spreadRadius: 0,
-                                      offset: Offset(0, 3.0))
-                                ],
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.calendar_today_rounded,
-                                          size: 22,
-                                          color: primaryColor,
-                                        )
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: 17,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Select a day',
-                                          style: regularBlack12,
-                                        ),
-                                        Obx(
-                                          () => Text(
-                                            "${DateFormat('dd MMMM yyyy').format(controller.dateTime.value)}",
-                                            style: mediumBlack14,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Icon(
-                                  Icons.keyboard_arrow_down,
-                                  size: 24,
-                                )
+                                dialogBackgroundColor: Colors.white,
+                                dialogTheme: const DialogTheme(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20)))),
+                              ),
+                              child: child!,
+                            );
+                          },
+                        ).then((date) async {
+                          if (date != null) {
+                            print('check1');
+                            await controller.setDateTime(date);
+                            print('check2');
+                            controller.activeButton.value = true;
+                            // await
+                            await controller.checkAvailability(
+                                selected_date: DateFormat('yyyy-MM-dd')
+                                    .format(controller.dateTime.value!));
+                            print('check3');
+                          } else {}
+                          controller.resetStartEndPrice();
+                        });
+                      },
+                      child: Container(
+                          padding: EdgeInsets.only(
+                              left: 12, top: 6, right: 10, bottom: 6),
+                          decoration: BoxDecoration(
+                              boxShadow: const [
+                                BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 4,
+                                    spreadRadius: 0,
+                                    offset: Offset(0, 3.0))
                               ],
-                            )),
-                      ),
-                      //Time
-                      Row(
-                        children: [
-                          //Time start
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () async {
-                                await _showStartTimePicker(context);
-                              },
-                              child: Container(
-                                  padding: EdgeInsets.only(
-                                      left: 12, top: 6, right: 10, bottom: 6),
-                                  margin: EdgeInsets.only(top: 15),
-                                  decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color: Colors.black26,
-                                            blurRadius: 4,
-                                            spreadRadius: 0,
-                                            offset: Offset(0, 3.0))
-                                      ],
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Column(
+                                    mainAxisAlignment:MainAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.access_time_rounded,
-                                            size: 24,
-                                            color: primaryColor,
-                                          ),
-                                          SizedBox(
-                                            width: 17,
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                'Start',
-                                                style: regularBlack12,
-                                              ),
-                                              SizedBox(
-                                                height: 2,
-                                              ),
-                                              Obx(
-                                                () => controller
-                                                            .startTime.value ==
-                                                        null
-                                                    ? Text('-')
-                                                    : Text(
-                                                        '${DateFormat('HH:mm').format(controller.startTime.value!)}',
-                                                        style: mediumBlack14,
-                                                      ),
-                                              )
-                                            ],
-                                          )
-                                        ],
-                                      ),
                                       Icon(
-                                        Icons.keyboard_arrow_down,
-                                        size: 24,
+                                        Icons.calendar_today_rounded,
+                                        size: 22,
+                                        color: primaryColor,
                                       )
                                     ],
-                                  )),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 15,
-                          ),
-                          //Time end
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () async {
-                                List<DateTime> filteredSlots =
-                                    controller.filterSlots();
-                                await _showEndTimePicker(
-                                    context, filteredSlots);
-                              },
-                              child: Container(
+                                  ),
+                                  SizedBox(
+                                    width: 17,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Select a day',
+                                        style: regularBlack12,
+                                      ),
+                                      Obx(
+                                        () => controller.dateTime.value==null
+                                            ? Text('',style: mediumBlack14,)
+                                            : Text(
+                                              "${DateFormat('dd MMMM yyyy').format(controller.dateTime.value!)}",
+                                              style: mediumBlack14,
+                                            ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              Icon(
+                                Icons.keyboard_arrow_down,
+                                size: 24,
+                              )
+                            ],
+                          )),
+                    ),
+                    //Time
+                    Row(
+                      children: [
+                        //Time start
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () async {
+                              await _showStartTimePicker(context);
+                            },
+                            child: Container(
                                 padding: EdgeInsets.only(
                                     left: 12, top: 6, right: 10, bottom: 6),
                                 margin: EdgeInsets.only(top: 15),
@@ -454,7 +385,8 @@ class ReservationPage extends GetView<ReservationViewModel> {
                                 child: Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       children: [
@@ -473,18 +405,19 @@ class ReservationPage extends GetView<ReservationViewModel> {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              'End',
+                                              'Start',
                                               style: regularBlack12,
                                             ),
                                             SizedBox(
                                               height: 2,
                                             ),
                                             Obx(
-                                              () => controller.endTime.value ==
+                                              () => controller
+                                                          .startTime.value ==
                                                       null
                                                   ? Text('-')
                                                   : Text(
-                                                      '${DateFormat('HH:mm').format(controller.endTime.value!)}',
+                                                      '${DateFormat('HH:mm').format(controller.startTime.value!)}',
                                                       style: mediumBlack14,
                                                     ),
                                             )
@@ -497,17 +430,195 @@ class ReservationPage extends GetView<ReservationViewModel> {
                                       size: 24,
                                     )
                                   ],
-                                ),
+                                )),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 15,
+                        ),
+                        //Time end
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () async {
+                              List<DateTime> filteredSlots =
+                                  controller.filterSlots();
+                              await _showEndTimePicker(
+                                  context, filteredSlots);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.only(
+                                  left: 12, top: 6, right: 10, bottom: 6),
+                              margin: EdgeInsets.only(top: 15),
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: Colors.black26,
+                                        blurRadius: 4,
+                                        spreadRadius: 0,
+                                        offset: Offset(0, 3.0))
+                                  ],
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.access_time_rounded,
+                                        size: 24,
+                                        color: primaryColor,
+                                      ),
+                                      SizedBox(
+                                        width: 17,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            'End',
+                                            style: regularBlack12,
+                                          ),
+                                          SizedBox(
+                                            height: 2,
+                                          ),
+                                          Obx(
+                                            () => controller.endTime.value ==
+                                                    null
+                                                ? Text('-')
+                                                : Text(
+                                                    '${DateFormat('HH:mm').format(controller.endTime.value!)}',
+                                                    style: mediumBlack14,
+                                                  ),
+                                          )
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                  Icon(
+                                    Icons.keyboard_arrow_down,
+                                    size: 24,
+                                  )
+                                ],
                               ),
                             ),
                           ),
-                        ],
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 55,
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.black26,
+                                blurRadius: 4,
+                                spreadRadius: 0,
+                                offset: Offset(0, 1.0))
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
+                      margin: EdgeInsets.only(top: 15),
+                      child: TextField(
+                        keyboardType: TextInputType.multiline,
+                        controller: controller.addController,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        style: const TextStyle(fontSize: 12),
+                        decoration: InputDecoration(
+                            filled: true,
+                            fillColor: Colors.white,
+                            prefixIcon: Padding(
+                              padding:
+                                  EdgeInsets.only(right: 20.0, left: 15.0),
+                              child: Icon(
+                                Icons.add,
+                                color: grey,
+                                size: 22,
+                              ),
+                            ),
+                            hintText: 'Add Participant ID',
+                            hintStyle: TextStyle(
+                              fontSize: 14.0,
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(10.0)),
+                            border: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(10.0))),
+                        onSubmitted: (value) {
+                          controller.addParticipant(id: value);
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                    Obx(() => controller.participantName.isEmpty
+                        ? Container()
+                        : Container(
+                          margin: EdgeInsets.only(top: 12),
+                          height: 200,
+                          child: ListView.builder(
+                              itemCount: controller.participantName.length,
+                              itemBuilder: (context, index) {
+                                return Dismissible(
+                                  key: UniqueKey(),
+                                  onDismissed: (direction) {
+                                    // Remove the item from the list
+                                    controller.participantName.removeAt(index);
+                                    controller.participantId.removeAt(index);
+                                  },
+                                  background: Container(
+                                    color: Colors.red,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                      ],
+
+                                    ),
+                                  ),
+                                  child: Container(
+                                    height: 55,
+                                    margin: EdgeInsets.only(left: 8,right: 8,bottom: 5),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.all(Radius.circular(10),),
+                                      color: Colors.white,
+                                      border: Border.all(width: 2,color: primaryColor)
+                                    ),
+                                    child: ListTile(
+                                      leading: Icon(Icons.person),
+                                      title:
+                                          Text(controller.participantName[index],style: mediumBlack14,),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                        )),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
         bottomNavigationBar: Obx(() => controller.totalPrice.value != '-'
@@ -525,7 +636,11 @@ class ReservationPage extends GetView<ReservationViewModel> {
                           height: 35,
                           child: ElevatedButton(
                               onPressed: () {
-                                controller.createReservation();
+                                controller.reservationId.value != ''
+                                    ? controller.updateReservation()
+                                    : controller.createReservation();
+                                // Get.delete<ReservationViewModel>;
+                                // Get.offAndToNamed('/home');
                                 Get.back();
                               },
                               style: TextButton.styleFrom(
@@ -534,7 +649,7 @@ class ReservationPage extends GetView<ReservationViewModel> {
                                     borderRadius: BorderRadius.circular(5),
                                   )),
                               child: controller.loading.value == false
-                                  ? Text('Reseve', style: boldWhite14)
+                                  ? Text('Reserve', style: boldWhite14)
                                   : CircularProgressIndicator(
                                       color: Colors.white)))
                     ],

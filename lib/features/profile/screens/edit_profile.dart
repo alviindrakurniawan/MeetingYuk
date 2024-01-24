@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/profile/view_model/profile_viewmodel.dart';
-import 'package:meetingyuk/features/profile/widgets/button.dart';
-import 'package:meetingyuk/features/profile/widgets/custom_form.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/notif.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/features/profile/view_model/profile_viewmodel.dart';
+import 'package:MeetingYuk/features/profile/widgets/button.dart';
+import 'package:MeetingYuk/features/profile/widgets/custom_form.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 
 class EditProfile extends GetView<ProfileViewModel> {
   const EditProfile({Key? key}) : super(key: key);
@@ -50,6 +50,7 @@ class EditProfile extends GetView<ProfileViewModel> {
                     right: 0,
                     child: GestureDetector(
                       onTap: () {
+                        // controller.selectMultipleImage();
                         controller.openImagePicker();
                       },
                       child: Container(
@@ -69,25 +70,7 @@ class EditProfile extends GetView<ProfileViewModel> {
               ],
             ),
           ),
-          // Container(
-          //   alignment: Alignment.center,
-          //   margin: EdgeInsets.only(top: 10, bottom: 30),
-          //   width: 132,
-          //   height: 132,
-          //   decoration: BoxDecoration(
-          //     color: Colors.black,
-          //     shape: BoxShape.circle,
-          //     image: DecorationImage(
-          //       image: AssetImage(
-          //         'assets/img_profile.png',
-          //       ),
-          //     ),
-          //   ),
-          //   child: Align(
-          //     alignment: Alignment.bottomRight,
-          //     child: IconButton(onPressed: () {}, icon: Icon(Icons.edit)),
-          //   ),
-          // ),
+
           Container(
             margin: EdgeInsets.only(top: 30, left: 24, right: 24),
             padding: EdgeInsets.only(top: 22, left: 22, right: 22, bottom: 15),
@@ -100,6 +83,31 @@ class EditProfile extends GetView<ProfileViewModel> {
               key: formKey,
               child: Column(
                 children: [
+                  // TextFormField(
+                  //   controller: controller.IdController,
+                  //   decoration: InputDecoration(
+                  //     hintText: 'ID',
+                  //     border: OutlineInputBorder(
+                  //       //focus
+                  //       borderRadius: BorderRadius.circular(14),
+                  //       borderSide: BorderSide(color: primaryColor),
+                  //     ),
+                  //     enabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(14),
+                  //       borderSide: BorderSide(color: borderFormColor),
+                  //     ),
+                  //     disabledBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(14),
+                  //       borderSide: BorderSide(color: borderFormColorDisable),
+                  //     ),
+                  //     focusedBorder: OutlineInputBorder(
+                  //       borderRadius: BorderRadius.circular(14),
+                  //       borderSide: BorderSide(color: primaryColor),
+                  //     ),
+                  //     contentPadding: const EdgeInsets.all(12),
+                  //   ),
+                  //   enabled: false,
+                  // ),
                   CustomForm(
                     title: 'Name',
                     controller: controller.nameController,

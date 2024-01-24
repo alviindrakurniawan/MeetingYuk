@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/features/auth/repo/splash_repo.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/features/auth/repo/splash_repo.dart';
 import 'package:get_storage/get_storage.dart';
 
 class SplashPage extends StatefulWidget {

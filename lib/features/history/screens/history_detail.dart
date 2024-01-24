@@ -3,27 +3,28 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:meetingyuk/features/history/view_model/detailhistory_viewmodel.dart';
-import 'package:meetingyuk/features/history/view_model/history_viewmodel.dart';
-import 'package:meetingyuk/features/home/model/detail_reservation.dart';
-import 'package:meetingyuk/features/home/widget/card_room.dart';
-import 'package:meetingyuk/features/home/widget/facilities.dart';
-import 'package:meetingyuk/features/profile/widgets/button.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
-import 'package:meetingyuk/features/home/model/detail_place.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
+import 'package:MeetingYuk/features/history/view_model/detailhistory_viewmodel.dart';
+import 'package:MeetingYuk/features/history/view_model/history_viewmodel.dart';
+import 'package:MeetingYuk/features/home/model/detail_reservation.dart';
+import 'package:MeetingYuk/features/home/widget/card_room.dart';
+import 'package:MeetingYuk/features/home/widget/facilities.dart';
+import 'package:MeetingYuk/features/profile/widgets/button.dart';
+
+import 'package:MeetingYuk/features/home/model/detail_place.dart';
 
 class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
   const HistoryDetailPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final DetailReservation detailReservation = Get.arguments['detailReservation'];
+    final DetailReservation detailReservation =
+        Get.arguments['detailReservation'];
     final DetailPlace detailPlace = Get.arguments['detailPlace'];
     final _mapController = MapController();
     DateTime dateStart = DateTime.parse(detailReservation.startAt.toString());
     DateTime dateEnd = DateTime.parse(detailReservation.endAt.toString());
-    // final FixedExtentScrollController _controller = FixedExtentScrollController();
 
     Widget buildRating(double rating) {
       List<Widget> stars = [];
@@ -97,235 +98,9 @@ class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
                               width: 118,
                               height: 40,
                               onPressed: () {
-                                controller.cancelReservation(detailReservation.id);
-                                Get.back();
-                              },
-                              color: primaryColor),
-                    )
-                  ],
-                ),
-              ],
-            ),
-          ),
-          alignment: Alignment.center,
-          actionsAlignment: MainAxisAlignment.center,
-        ),
-      );
-    }
-
-    void timePicker() {
-      Get.dialog(
-        AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          title: const Text('Update Your Time',
-              textAlign: TextAlign.center, style: mediumBlack16),
-          titlePadding: EdgeInsets.only(top: 30, left: 11, right: 11),
-          contentPadding:
-              EdgeInsets.only(top: 30, bottom: 10, left: 20, right: 20),
-          content: Container(
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              children: [
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  children: [
-                    //Start
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: (){
-
-                        },
-                        child: Container(
-                            padding: EdgeInsets.only(
-                                left: 12, top: 6, right: 10, bottom: 6),
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 4,
-                                      spreadRadius: 0,
-                                      offset: Offset(0, 4.0))
-                                ],
-                                color: backgroundColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.access_time_rounded,
-                                  size: 24,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Start',
-                                      style: regularBlack12,
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Text(
-                                      '${dateStart.hour.toString().padLeft(2, '0')}:${dateStart.minute.toString().padLeft(2, '0')}',
-                                      style: boldBlack14,
-                                    )
-                                  ],
-                                )
-                              ],
-                            )),
-                      ),
-                    ),
-                    SizedBox(
-                      width: 15,
-                    ),
-                    //End
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: (){},
-                        child: Container(
-                            padding: EdgeInsets.only(
-                                left: 12, top: 6, right: 10, bottom: 6),
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black26,
-                                      blurRadius: 4,
-                                      spreadRadius: 0,
-                                      offset: Offset(0, 3.0))
-                                ],
-                                color: backgroundColor,
-                                borderRadius: BorderRadius.circular(10)),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  Icons.access_time_rounded,
-                                  size: 24,
-                                ),
-                                SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'End',
-                                      style: regularBlack12,
-                                    ),
-                                    SizedBox(
-                                      height: 2,
-                                    ),
-                                    Text(
-                                      '${dateEnd.hour.toString().padLeft(2, '0')}:${dateEnd.minute.toString().padLeft(2, '0')}',
-                                      style: boldBlack14,
-                                    )
-                                  ],
-                                )
-                              ],
-                            )),
-                      ),
-                    ),
-                  ],
-                ),
-                Container(
-                  margin: EdgeInsets.only(top: 30),
-
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      CustomTextButton(
-                          title: Text('Cancel', style: boldPrim14),
-                          borderRad: 10,
-                          width: 65,
-                          height: 40,
-                          onPressed: () {
-                            Get.back();
-                          },
-                          color: Colors.white),
-                      Obx(
-                        () => controller.loading.value
-                            ? CustomFilledButton(
-                                title: CircularProgressIndicator(
-                                  color: primaryColor,
-                                ),
-                                width: 118,
-                                height: 40,
-                                color: Colors.white)
-                            : CustomTextButton(
-                                title: Text('OK', style: boldPrim14),
-                                borderRad: 10,
-                                width: 65,
-                                height: 40,
-                                onPressed: null,
-                                color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          alignment: Alignment.center,
-          actionsAlignment: MainAxisAlignment.center,
-        ),
-      );
-    }
-
-    //pop up time picker =>check time avail =>choose=>confimation
-    void toUpdate() {
-      Get.dialog(
-        AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          title: const Text('Update This Reservation?',
-              textAlign: TextAlign.center, style: mediumBlack16),
-          titlePadding: EdgeInsets.only(top: 30, left: 11, right: 11),
-          contentPadding: EdgeInsets.only(top: 50, bottom: 20),
-          content: Container(
-            child: Wrap(
-              alignment: WrapAlignment.start,
-              children: [
-                SizedBox(
-                  height: 30,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomFilledButton(
-                        title: Text('NO', style: boldWhite16),
-                        width: 118,
-                        height: 40,
-                        onPressed: () {
-                          Get.back();
-                        },
-                        color: redColor),
-                    SizedBox(width: 30),
-                    Obx(
-                      () => controller.loading.value
-                          ? CustomFilledButton(
-                              title: CircularProgressIndicator(
-                                color: Colors.white,
-                              ),
-                              width: 118,
-                              height: 40,
-                              color: primaryColor)
-                          : CustomFilledButton(
-                              title: Text('YES', style: boldWhite16),
-                              width: 118,
-                              height: 40,
-                              onPressed: () {
                                 controller
                                     .cancelReservation(detailReservation.id);
+                                Get.back();
                               },
                               color: primaryColor),
                     )
@@ -347,20 +122,24 @@ class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
             toCancel();
           };
         case 1:
-          return (){};
+          return () {};
         case 2:
-          return (){};
+          return () {};
         case 3:
-          return (){};
+          return () {};
       }
     }
+
     VoidCallback funcButtonUpdate(int detailStatus) {
       switch (detailStatus) {
         case 3:
-          return (){};
+          return () {};
         default:
-          return (){
-            Get.toNamed('/reservation',arguments: {'reservationId':detailReservation.id,'detailPlace':detailPlace});
+          return () {
+            Get.toNamed('/reservation', arguments: {
+              'reservationId': detailReservation.id,
+              'detailPlace': detailPlace
+            });
           };
       }
     }
@@ -379,6 +158,7 @@ class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
           return lightGrey;
       }
     }
+
     Color colorButtonUpdate(int detailStatus) {
       switch (detailStatus) {
         case 3:
@@ -468,7 +248,7 @@ class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
                 //Status Info
                 Container(
                   margin: EdgeInsets.only(
-                      left: 7.5, right: 7.5, top: 10, bottom: 15),
+                      left: 7.5, right: 7.5, top: 15, bottom: 15),
                   padding:
                       EdgeInsets.only(left: 16, top: 10, right: 16, bottom: 10),
                   decoration: BoxDecoration(
@@ -498,11 +278,13 @@ class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
                         children: [
                           CustomFilledButton(
                               title: Text('UPDATE', style: boldWhite12),
-                              color: colorButtonUpdate(detailReservation.status),
+                              color:
+                                  colorButtonUpdate(detailReservation.status),
                               width: 85,
                               height: 35,
                               borderRad: 10,
-                              onPressed: funcButtonUpdate(detailReservation.status)),
+                              onPressed:
+                                  funcButtonUpdate(detailReservation.status)),
                           SizedBox(width: 10),
                           CustomFilledButton(
                               title: Text('CANCEL', style: boldWhite12),
@@ -517,6 +299,67 @@ class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
                       ),
                     ],
                   ),
+                ),
+                detailReservation.participants.isEmpty
+                    ? SizedBox()
+                    : Container(
+                        height: 150,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                        margin: EdgeInsets.symmetric(horizontal: 7.5),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 4,
+                              spreadRadius: 0,
+                              offset: Offset(0, 1.0),
+                            ),
+                          ],
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Participant',
+                              style: boldBlack14,
+                            ),
+                            SizedBox(height: 10),
+                            Expanded(
+                              child: ListView.separated(
+                                padding: EdgeInsets.only(top: 10),
+                                itemCount:
+                                    detailReservation.participants.length,
+                                separatorBuilder: (context, index) =>
+                                    SizedBox(height: 5),
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    padding: EdgeInsets.only(left: 10),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Icon(Icons.person),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          detailReservation
+                                              .participants[index].name,
+                                          style: mediumBlack14,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                SizedBox(
+                  height: 10,
                 ),
                 //Room
                 Container(
@@ -771,11 +614,10 @@ class HistoryDetailPage extends GetView<DetailHistoryViewModel> {
                                               .toDouble(),
                                           detailPlace.location.longitude
                                               .toDouble()),
-
                                       builder: (context) => Icon(
                                             Icons.location_on,
                                             color: primaryColor,
-                                        size: 30,
+                                            size: 30,
                                           ))
                                 ],
                               )

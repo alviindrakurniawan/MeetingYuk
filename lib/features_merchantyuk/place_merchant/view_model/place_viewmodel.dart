@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/features/home/model/detail_place.dart';
-import 'package:meetingyuk/features/home/model/place.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/repo/place_repo.dart';
-import 'package:meetingyuk/ulits/notif.dart';
+import 'package:MeetingYuk/features/home/model/detail_place.dart';
+import 'package:MeetingYuk/features/home/model/place.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/repo/place_repo.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
 
 
 class PlaceViewModel extends GetxController {

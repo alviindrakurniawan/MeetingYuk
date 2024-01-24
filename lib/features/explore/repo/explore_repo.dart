@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:meetingyuk/network/network_api_services.dart';
+import 'package:MeetingYuk/network/network_api_services.dart';
 
 class ExploreRepository {
   final ApiService _apiService = ApiService();

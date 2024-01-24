@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/features/explore/screens/explore.dart';
-import 'package:meetingyuk/features/profile/screens/profile.dart';
+import 'package:MeetingYuk/features/chat/screens/merchantchat_screen.dart';
+import 'package:MeetingYuk/features/explore/screens/explore.dart';
+import 'package:MeetingYuk/features/profile/screens/profile.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features_merchantyuk/home_merchant/screens/booking_merchant.dart';
-import 'package:meetingyuk/features_merchantyuk/home_merchant/view_model/dashboard_merchantVM.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/screens/place_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/home_merchant/screens/booking_merchant.dart';
+import 'package:MeetingYuk/features_merchantyuk/home_merchant/view_model/dashboard_merchantVM.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/screens/place_merchant.dart';
 
 class DashboardMerchant extends StatelessWidget {
 
@@ -23,7 +24,7 @@ class DashboardMerchant extends StatelessWidget {
                   index: controller.currentTab,
                   children: [
                     BookingMerchant(),
-                    Explore(),
+                    MerchantChatScreen(),
                     PlaceMerchant(),
                     Profile()
                   ],

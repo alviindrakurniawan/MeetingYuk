@@ -1,10 +1,8 @@
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/explore/view_model/explore_viewmodel.dart';
-import 'package:meetingyuk/features/history/view_model/history_viewmodel.dart';
-import 'package:meetingyuk/features/home/view_model/home_viewmodel.dart';
-import 'package:meetingyuk/features/profile/view_model/profile_viewmodel.dart';
-import 'package:meetingyuk/features_merchantyuk/home_merchant/view_model/booking_merchantVM.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/view_model/place_viewmodel.dart';
+import 'package:MeetingYuk/features/chat/view_model/chat_controller.dart';
+import 'package:MeetingYuk/features/profile/view_model/profile_viewmodel.dart';
+import 'package:MeetingYuk/features_merchantyuk/home_merchant/view_model/booking_merchantVM.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/view_model/place_viewmodel.dart';
 
 
 
@@ -28,13 +26,13 @@ class DashMerchantViewModel extends GetxController {
           Get.delete<BookingViewModel>();
           break;
         case 1:
-          Get.delete<ExploreViewModel>();
+          // Get.delete<ChatViewModel>();
           break;
         case 2:
           Get.delete<PlaceViewModel>();
           break;
         case 3:
-          Get.delete<ProfileViewModel>();
+          // Get.delete<ProfileViewModel>();
           break;
       }
       _currentTab = currenttab;
@@ -43,7 +41,7 @@ class DashMerchantViewModel extends GetxController {
           Get.put(BookingViewModel());
           break;
         case 1:
-          Get.put(ExploreViewModel());
+          Get.put(ChatViewModel());
           break;
         case 2:
           Get.put(PlaceViewModel());

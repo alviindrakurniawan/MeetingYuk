@@ -7,7 +7,7 @@ class SplashRepository{
 
   void isLogin(){
     bool isLoggedIn = storage.read('isLoggedIn') ?? false;
-    int isMerchant = storage.read('is_merchant');
+    int isMerchant = storage.read('is_merchant')??0;
     String routeName = isLoggedIn
         ? isMerchant==1
           ?'/home-merchant'

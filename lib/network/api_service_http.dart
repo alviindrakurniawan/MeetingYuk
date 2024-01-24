@@ -3,8 +3,8 @@ import 'dart:convert';
 
 import 'package:get/get_connect.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/network/app_exception.dart';
-import 'package:meetingyuk/network/getconnect_cookie.dart';
+import 'package:MeetingYuk/network/app_exception.dart';
+import 'package:MeetingYuk/network/getconnect_cookie.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 

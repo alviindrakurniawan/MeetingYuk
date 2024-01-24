@@ -2,12 +2,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:meetingyuk/features/home/widget/facilities.dart';
-import 'package:meetingyuk/features/profile/widgets/button.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/view_model/edit_place_viewmodel.dart';
-import 'package:meetingyuk/features_merchantyuk/place_merchant/widget/card_room_merchant.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/features/home/widget/facilities.dart';
+import 'package:MeetingYuk/features/profile/widgets/button.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/view_model/edit_place_viewmodel.dart';
+import 'package:MeetingYuk/features_merchantyuk/place_merchant/widget/card_room_merchant.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 import 'package:get/get.dart';
 
 class DetailPlaceMerchant extends GetView<EditPlaceViewModel> {
@@ -557,7 +557,7 @@ class DetailPlaceMerchant extends GetView<EditPlaceViewModel> {
                         CarouselSlider.builder(
                             itemCount: controller.detailPlace.value!.rooms.length,
                             options: CarouselOptions(
-                              initialPage: 1,
+                              initialPage: 0,
                               viewportFraction: 0.7,
                               height: 280,
                               autoPlay: false,

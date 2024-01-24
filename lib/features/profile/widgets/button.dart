@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
 
 
 class CustomFilledButton extends StatelessWidget {

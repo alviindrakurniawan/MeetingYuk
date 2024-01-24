@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/features/home/screens/home.dart';
-import 'package:meetingyuk/features/history/screens/history.dart';
-import 'package:meetingyuk/features/explore/screens/explore.dart';
-import 'package:meetingyuk/features/profile/screens/profile.dart';
-import 'package:meetingyuk/features/home/view_model/dasboard_viewmodel.dart';
+import 'package:MeetingYuk/features/home/screens/home.dart';
+import 'package:MeetingYuk/features/history/screens/history.dart';
+import 'package:MeetingYuk/features/explore/screens/explore.dart';
+import 'package:MeetingYuk/features/profile/screens/profile.dart';
+import 'package:MeetingYuk/features/home/view_model/dasboard_viewmodel.dart';
 import 'package:get/get.dart';
 
 class Dashboard extends StatelessWidget {

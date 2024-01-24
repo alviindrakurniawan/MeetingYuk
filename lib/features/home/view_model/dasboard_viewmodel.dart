@@ -1,9 +1,9 @@
 
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/explore/view_model/explore_viewmodel.dart';
-import 'package:meetingyuk/features/history/view_model/history_viewmodel.dart';
-import 'package:meetingyuk/features/home/view_model/home_viewmodel.dart';
-import 'package:meetingyuk/features/profile/view_model/profile_viewmodel.dart';
+import 'package:MeetingYuk/features/explore/view_model/explore_viewmodel.dart';
+import 'package:MeetingYuk/features/history/view_model/history_viewmodel.dart';
+import 'package:MeetingYuk/features/home/view_model/home_viewmodel.dart';
+import 'package:MeetingYuk/features/profile/view_model/profile_viewmodel.dart';
 
 
 
@@ -34,7 +34,7 @@ class DashViewModel extends GetxController {
           break;
         case 3:
           // print('waw');
-          Get.delete<ProfileViewModel>();
+          // Get.delete<ProfileViewModel>();
           break;
       }
       _currentTab = currenttab;

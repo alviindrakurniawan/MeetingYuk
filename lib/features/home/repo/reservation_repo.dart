@@ -1,4 +1,4 @@
-import 'package:meetingyuk/network/network_api_services.dart';
+import 'package:MeetingYuk/network/network_api_services.dart';
 
 class ReservationRepository {
   final ApiService _apiService = ApiService();
@@ -14,7 +14,20 @@ class ReservationRepository {
 
   Future<dynamic> createReservation(var body) async {
     final response =
-        await _apiService.post(endpoint: '/reservations/', body: body);
+        await _apiService.post(endpoint: '/reservations', body: body);
+
+    return response;
+  }
+
+  Future<dynamic> updateReservation({required var body,required String reservationId}) async {
+    final response =
+    await _apiService.put(endpoint: '/reservations/$reservationId', body: body);
+
+    return response;
+  }
+
+  Future<dynamic> addParticipant({required String id}) async{
+    final response = await _apiService.get(endpoint: '/users/$id');
 
     return response;
   }

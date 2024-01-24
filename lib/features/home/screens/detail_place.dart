@@ -1,12 +1,14 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:latlong2/latlong.dart';
-import 'package:meetingyuk/features/home/view_model/reservation_viewmodel.dart';
-import 'package:meetingyuk/features/home/widget/card_room.dart';
-import 'package:meetingyuk/features/home/widget/facilities.dart';
-import 'package:meetingyuk/ulits/color.dart';
-import 'package:meetingyuk/ulits/style.dart';
+import 'package:MeetingYuk/features/chat/view_model/chat_controller.dart';
+import 'package:MeetingYuk/features/home/view_model/reservation_viewmodel.dart';
+import 'package:MeetingYuk/features/home/widget/card_room.dart';
+import 'package:MeetingYuk/features/home/widget/facilities.dart';
+import 'package:MeetingYuk/common/ulits/color.dart';
+import 'package:MeetingYuk/common/ulits/style.dart';
 import 'package:get/get.dart';
 
 class DetailPlace extends GetView<ReservationViewModel> {
@@ -142,6 +144,8 @@ class DetailPlace extends GetView<ReservationViewModel> {
         ),
       );
     }
+    GetStorage storage=GetStorage();
+    final ChatViewModel chatController = Get.find();
 
     return Scaffold(
         body: CustomScrollView(
@@ -153,6 +157,7 @@ class DetailPlace extends GetView<ReservationViewModel> {
                 child: IconButton(
                     onPressed: () {
                       Get.back();
+                      Get.delete<ReservationViewModel>;
                     },
                     icon: Icon(Icons.arrow_back_ios_new_sharp,
                         size: 20, color: grey)),
@@ -215,6 +220,64 @@ class DetailPlace extends GetView<ReservationViewModel> {
                         SizedBox(height: 3),
                         buildRating(controller.detailPlace.value!.ratings),
                         SizedBox(height: 4),
+                        InkWell(
+                          onTap: () {
+                            print('1');
+                            chatController
+                                .getChatId(controller.detailPlace.value!.name)
+                                .then((result) {
+                                  print(result['chatId']);
+                              if (result['chatId'] == 'NOT FOUND') {
+                                print('2.1');
+
+                                final key = storage.read('public_key');
+                                final merchPubKey= 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh9li1m0VWUjN2wZiCX46k9U3aAgfJ6WKkW0Y6MP30n2ajScZUFqj2eB3w7qHyLJAXVAxXe0E2sxtO20mRphOtv91fRjWj2nLXGKi//jZb/JewZvvgXRIi5JAZQlL5ChrBpNf8RRFscj2HzBNyNlZd0GrOwYoyf8+fSGO8Sj4tDrcq0FctCEqww7eUEP8+4VKOYSnwmMtnowxmeEv6hNUz0hHx2qiT425YtOIwRB0H5B773oTsZH9o04343ZlU+8H/3TEU1QA/OZU+S45jc6tmy9cmS+wulsyB1ps3XMAorvVkDcEBZTvJGr2iO/R4pfT8DW0PtzqwcWxiqkn40ZnZQIDAQAB';
+                                chatController.initiateChat(
+                                  controller.detailPlace.value!.ownerId,
+                                  controller.detailPlace.value!.name,
+                                  controller.detailPlace.value!.imageUrl,
+                                  key,
+                                  merchPubKey,
+                                );
+                                print('2');
+                                Get.toNamed('/chat');
+                              } else {
+                                print('3.1');
+                                chatController.selectChat(
+                                  result['chatId'],
+                                  controller.detailPlace.value!.ownerId,
+                                  controller.detailPlace.value!.name,
+                                  controller.detailPlace.value!.imageUrl,
+                                  result['roomKey'],
+                                );
+                                print('3');
+                                Get.toNamed('/detail-chat');
+                              }
+                            });
+                          },
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 10.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.chat,
+                                  color: Color(0xFF5ABCD0),
+                                ),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                Text(
+                                  'Chat Now',
+                                  style: TextStyle(
+                                    color: Color(0xFF5ABCD0),
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        )
                       ],
                     ),
                   ),
@@ -451,26 +514,7 @@ class DetailPlace extends GetView<ReservationViewModel> {
                                 maxLines: 2,
                                 overflow: TextOverflow.fade,
                               )),
-                              InkWell(
-                                onTap: () {},
-                                child: Container(
-                                  margin: EdgeInsets.only(left: 15),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(24),
-                                      border: Border.all(
-                                          width: 1, color: primaryColor)),
-                                  height: 19,
-                                  width: 35,
-                                  child: IconButton(
-                                    padding: EdgeInsets.all(0),
-                                    splashColor: Colors.transparent,
-                                    focusColor: Colors.transparent,
-                                    icon: Icon(Icons.turn_right,
-                                        color: primaryColor, size: 16),
-                                    onPressed: () {},
-                                  ),
-                                ),
-                              )
+
                             ],
                           ),
                         )
@@ -493,7 +537,7 @@ class DetailPlace extends GetView<ReservationViewModel> {
                             itemCount:
                                 controller.detailPlace.value!.rooms.length,
                             options: CarouselOptions(
-                              initialPage: 1,
+                              initialPage: 0,
                               viewportFraction: 0.6,
                               height: 235,
                               autoPlay: false,
@@ -502,6 +546,7 @@ class DetailPlace extends GetView<ReservationViewModel> {
                               enlargeFactor: 0.1,
                               onPageChanged: (index,reason){
                                 controller.indexRoom.value = index;
+                                print( controller.indexRoom.value);
                               },
                             ),
                             itemBuilder: (BuildContext context, int itemIndex,

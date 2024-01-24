@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:meetingyuk/features/profile/model/userData.dart';
-import 'package:meetingyuk/features/profile/repo/profile_repo.dart';
-import 'package:meetingyuk/ulits/notif.dart';
+import 'package:MeetingYuk/features/auth/model/user_model.dart';
+import 'package:MeetingYuk/features/profile/repo/profile_repo.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileViewModel extends GetxController {
@@ -15,12 +15,16 @@ class ProfileViewModel extends GetxController {
   @override
   void onInit() async {
     super.onInit();
+    currentUser.value.publicKey=storage.read('public_key');
+    currentUser.value.userId=storage.read('userId');
     await getDetailProfile();
   }
 
 
+
   // fetch from api and insert it to text editing controller
   final nameController = TextEditingController();
+  final IdController = TextEditingController();
   final telpController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -34,12 +38,23 @@ class ProfileViewModel extends GetxController {
   var loading = false.obs;
   var loadingImage = false.obs;
 
-  var imageUrl= 'default'.obs;
+  var imageUrl = 'default'.obs;
+  var nameAccount=''.obs;
   var account = ''.obs;
 
-  // void checkAccount (){
-  //   getDetailProfile();
-  // }
+
+  Rx<UserModel>currentUser = UserModel(
+      name: '',
+      userId: '',
+      profilePic: '',
+      isMerchant: 0,
+      phoneNumber: '',
+      publicKey: '').obs;
+
+  List<XFile>? images = [];
+  List<String> listImagePath = [];
+  var selectedFileCount =0.obs;
+
 
 
   void togglePasswordVisibility() {
@@ -73,7 +88,7 @@ class ProfileViewModel extends GetxController {
     if (value!.isEmpty) {
       return "Email Wajib Diisi";
     } else if (!RegExp(
-            r"^[a-zA-Z\d.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z\d]+\.[a-zA-Z]+")
+        r"^[a-zA-Z\d.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z\d]+\.[a-zA-Z]+")
         .hasMatch(value)) {
       return "Enter The E-mail According to The Format";
     } else {
@@ -102,46 +117,150 @@ class ProfileViewModel extends GetxController {
         nameController.text = value['data']['name'];
         emailController.text = value['data']['email'];
         telpController.text = value['data']['phone'];
+        // IdController.text = currentUser.value.userId;
 
-        if (value['data']['is_merchant']==0){
+        currentUser.value.name= value['data']['name'];
+        currentUser.value.phoneNumber= value['data']['phone'];
+        print(value['data']['phone']);
+        print('/////');
+        print(currentUser.value.name);
+        print('/////');
+        currentUser.value.profilePic=value['data']['profile_image_url'];
+
+
+        if (value['data']['is_merchant'] == 0) {
           account.value = 'MeetingYuk Account';
-        }else{
+        } else {
           account.value = 'MerchantYuk Account';
         }
 
 
-        if(value['data']['profile_image_url']!= ''){
+        if (value['data']['profile_image_url'] != '') {
           print('tidak kosong');
           imageUrl.value = value['data']['profile_image_url'];
         }
-      }else {
+      } else {
         Notif.snackBar('Error', _capitalizeword(value['message']));
         loading.value = false;
       }
     }).onError((error, stackTrace) {
       loading.value = false;
       print(error);
-      if(error.toString().contains('Token Expired')){
+      if (error.toString().contains('Token Expired')) {
         Get.offAllNamed('/login');
       }
       Notif.snackBar('Error', _capitalizeword(error.toString()));
-
     });
   }
 
+  void selectMultipleImage()async{
+    final picker = ImagePicker();
+    images = await picker.pickMultiImage();
+    if(images != null){
+      for(XFile file in images!){
+        listImagePath.add(file.path);
+      }
+      print('eee');
+      print(listImagePath[0]);
+      uploadImage();
+
+    }else{
+      Notif.snackBar('Fail', 'No Images selected');
+    }
+    selectedFileCount.value=listImagePath.length;
+  }
+
+  Future uploadImage()async{
+    try{
+      final form = FormData({});
+      for(String path in listImagePath){
+        form.fields.add(MapEntry("image",MultipartFile(File(path), filename: "${DateTime.now().millisecondsSinceEpoch}.${path.split('.').last}").toString()));
+      }
+      _api.updateProfileImage(form).then((value) {
+        print('upload image: $value');
+        if (value["code"] == 200) {
+          loadingImage.value = false;
+
+          imageUrl.value = value['data']['profile_image_url'];
+
+          Notif.snackBar('Image Profile Update', 'Success');
+        } else {
+          Notif.snackBar('Error', _capitalizeword(value['message']));
+          loadingImage.value = false;
+        }
+      }).onError((error, stackTrace) {
+        loadingImage.value = false;
+        Notif.snackBar('Error', _capitalizeword(error.toString()));
+      });
+
+    }catch(exception){
+      return Future.error(exception.toString());
+    }
+  }
+
+  Future openImagePicker_test() async {
+    loadingImage.value = true;
+
+    final picker = ImagePicker();
+    print('1');
+    final XFile? pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    print('2');
+    if (pickedImage != null) {
+      print('3');
+      final form = FormData({
+        'image': MultipartFile(File(pickedImage.path), filename: pickedImage.name),
+      });
+      print(form)
+;      print('4');
+
+      _api.updateProfileImage(form).then((value) {
+        print('upload image: $value');
+        if (value["code"] == 200) {
+          loadingImage.value = false;
+
+          imageUrl.value = value['data']['profile_image_url'];
+
+          Notif.snackBar('Image Profile Update', 'Success');
+        } else {
+          Notif.snackBar('Error', _capitalizeword(value['message']));
+          loadingImage.value = false;
+        }
+      }).onError((error, stackTrace) {
+        loadingImage.value = false;
+        Notif.snackBar('Error', _capitalizeword(error.toString()));
+      });
+    }
+  }
+
+  // File Changes
   Future openImagePicker() async {
     loadingImage.value = true;
 
     final picker = ImagePicker();
+    print('1');
     final XFile? pickedImage =
     await picker.pickImage(source: ImageSource.gallery);
-    if (pickedImage != null) {
-      final form = FormData({
-        'image': MultipartFile(File(pickedImage.path),filename: pickedImage.path.split('/').last)
-      });
-      print(pickedImage.path.split('/').last);
+    print('2');
 
-      _api.updateProfileImage(form).then((value) {
+    if (pickedImage != null) {
+      print('3');
+      final FormData form = FormData({
+        'image': MultipartFile(
+            File(pickedImage.path), filename: pickedImage.name)
+      });
+      print(form.files);
+      print(form);
+      print(pickedImage.path);
+      print(pickedImage.name);
+
+      // Print files
+      print('\nFiles:');
+      form.files.forEach((file) {
+        print('Field name: ${file.key}');
+        print('File name: ${file.value.filename}');
+      });
+
+     await _api.updateProfileImage(form).then((value) {
         print('upload image: $value');
         if (value["code"] == 200) {
           loadingImage.value = false;
@@ -199,7 +318,7 @@ class ProfileViewModel extends GetxController {
       if (value["code"] == 200) {
         storage.write('is_merchant', value['data']['is_merchant']);
         loading.value = false;
-        Get.back();
+        Get.offAllNamed('/login');
         Notif.snackBar('Upgrade Merchant', 'Success');
       } else {
         Get.back();

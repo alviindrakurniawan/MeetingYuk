@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:meetingyuk/ulits/color.dart';
+import '../ulits/color.dart';
 
 const TextStyle regularGrey10 = TextStyle(
     fontSize: 10,
@@ -24,6 +24,35 @@ const TextStyle regularPrim11 = TextStyle(
 const TextStyle regularBlack12 = TextStyle(
     fontSize: 12,
     color: blackColor
+);
+
+const TextStyle regularRed12 = TextStyle(
+    fontSize: 12,
+    color: redColor,
+);
+
+const TextStyle regularGreen12 = TextStyle(
+    fontSize: 12,
+    color: Colors.green,
+);
+
+const TextStyle italicBlack12 = TextStyle(
+    fontSize: 12,
+    color: blackColor,
+  fontStyle: FontStyle.italic,
+
+);
+
+const TextStyle italicRed12 = TextStyle(
+    fontSize: 12,
+    color: redColor,
+    fontStyle: FontStyle.italic
+);
+
+const TextStyle italicGreen12 = TextStyle(
+    fontSize: 12,
+    color: Colors.green,
+    fontStyle: FontStyle.italic
 );
 
 const TextStyle regularPrim12 = TextStyle(
@@ -102,6 +131,7 @@ const TextStyle regBlack14 = TextStyle(
   fontSize: 14,
   color: blackColor,
 );
+
 
 const TextStyle boldBlack14 = TextStyle(
     fontSize: 14,

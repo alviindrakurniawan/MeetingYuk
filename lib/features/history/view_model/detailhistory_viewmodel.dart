@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meetingyuk/features/history/repo/history_repo.dart';
-import 'package:meetingyuk/ulits/notif.dart';
+import 'package:MeetingYuk/features/history/repo/history_repo.dart';
+import 'package:MeetingYuk/common/ulits/notif.dart';
 import 'package:collection/collection.dart';
 
 class DetailHistoryViewModel extends GetxController {
